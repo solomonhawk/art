@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+set -e
+
+cargo build --release
+
+./target/release/art
+
+FILENAME="art-$(date +"%Y%m%d%I%M%S%p").mp4"
+
+# @NOTE: resolution hard-coded here for now
+ffmpeg -r 30 -f image2 -s 800x600 -i frames/%05d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p "videos/$FILENAME"
+
+rm -rf frames/*
